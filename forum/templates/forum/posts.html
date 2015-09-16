@@ -1,0 +1,48 @@
+{% extends "forum/base.html" %}
+
+{% load bootstrap3 %}
+
+{% block content %}
+
+{% if messages %}
+<div class="messages">
+    {% for message in messages %}
+    <div{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}</div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<div class="row">
+    <div class="col-md-8 col-md-offset-1">
+        <form method="post" class="form">
+            {% csrf_token %}
+            {% bootstrap_form form show_label=False %}
+            {% buttons %}
+            <button type="submit" class="btn btn-primary">
+                {% bootstrap_icon "star" %} Post reply
+            </button>
+            {% endbuttons %}
+        </form>
+    </div>
+</div>
+
+<hr />
+
+{% for post in posts %}
+<div class="row post">
+    <div class="col-md-8 col-md-offset-1">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                {{ post.message }}
+            </div>
+            <div class="panel-footer">
+                <p class="text-right posted-at">Posted at {{ post.created_at|date:'DATETIME_FORMAT' }} by {{ post.owner.username }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<hr />
+
+{% endblock %}
